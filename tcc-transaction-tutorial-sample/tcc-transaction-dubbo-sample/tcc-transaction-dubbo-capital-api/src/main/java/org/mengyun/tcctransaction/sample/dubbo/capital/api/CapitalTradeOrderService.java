@@ -7,7 +7,7 @@ import org.mengyun.tcctransaction.api.TransactionContext;
  * Created by changming.xie on 4/1/16.
  */
 public interface CapitalTradeOrderService {
-
+	
     public void record(TransactionContext transactionContext,CapitalTradeOrderDto tradeOrderDto);
     
     public void confirmRecord(TransactionContext transactionContext, CapitalTradeOrderDto tradeOrderDto);

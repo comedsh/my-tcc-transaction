@@ -44,8 +44,7 @@ public class ZooKeeperTransactionRepository extends CachableTransactionRepositor
     protected int doCreate(Transaction transaction) {
 
         try {
-            getZk().create(getTxidPath(transaction.getXid()),
-                    SerializationUtils.serialize(transaction), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            getZk().create(getTxidPath(transaction.getXid()), SerializationUtils.serialize(transaction), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
             return 1;
         } catch (Exception e) {
             throw new TransactionIOException(e);
@@ -56,7 +55,6 @@ public class ZooKeeperTransactionRepository extends CachableTransactionRepositor
     protected int doUpdate(Transaction transaction) {
 
         try {
-
             transaction.updateTime();
             transaction.updateVersion();
             Stat stat = getZk().setData(getTxidPath(transaction.getXid()), SerializationUtils.serialize(transaction), (int) transaction.getVersion() - 2);
@@ -78,7 +76,6 @@ public class ZooKeeperTransactionRepository extends CachableTransactionRepositor
 
     @Override
     protected Transaction doFindOne(Xid xid) {
-
         byte[] content = null;
         try {
             Stat stat = new Stat();
@@ -96,7 +93,7 @@ public class ZooKeeperTransactionRepository extends CachableTransactionRepositor
     @Override
     protected List<Transaction> doFindAllUnmodifiedSince(Date date) {
 
-        List<Transaction> allTransactions = doFindAll();
+    	List<Transaction> allTransactions = doFindAll();
 
         List<Transaction> allUnmodifiedSince = new ArrayList<Transaction>();
 

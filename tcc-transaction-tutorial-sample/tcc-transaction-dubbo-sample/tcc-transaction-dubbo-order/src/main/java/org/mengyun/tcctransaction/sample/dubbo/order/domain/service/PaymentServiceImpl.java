@@ -29,13 +29,19 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Compensable(confirmMethod = "confirmMakePayment",cancelMethod = "cancelMakePayment")
     public void makePayment(Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {
+    	
         System.out.println("order try make payment called");
 
         order.pay(redPacketPayAmount, capitalPayAmount);
+        
         orderRepository.updateOrder(order);
 
         capitalTradeOrderService.record(null, buildCapitalTradeOrderDto(order));
+        
         redPacketTradeOrderService.record(null, buildRedPacketTradeOrderDto(order));
+        
+        // Scenario II: 在主进程调用处抛出异常
+        throw new RuntimeException("Manull Runtime Exception - main Process");
     }
 
     public void confirmMakePayment(Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {

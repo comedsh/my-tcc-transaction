@@ -20,7 +20,10 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
     @Autowired
     CapitalAccountDao capitalAccountDao;    
 
-    @Override
+    /**
+     * #1 Trying step
+     *    “未达款” - 将要被扣除的款项，先暂扣 -> 临时锁定
+     */
     @Compensable(confirmMethod = "confirmRecord", cancelMethod = "cancelRecord")
     public void record(TransactionContext transactionContext, CapitalTradeOrderDto tradeOrderDto) {
         System.out.println("capital try record called");
@@ -49,7 +52,11 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
     	}
 		
 	}
-
+    
+    /**
+     * #2.1 CONFIRM
+     * 		确认事务完成，将 "未达款" 最终转移给另外一个用户，使其成为“已达款”
+     */
 	public void confirmRecord(TransactionContext transactionContext, CapitalTradeOrderDto tradeOrderDto) {
         System.out.println("capital confirm record called");
 
@@ -59,7 +66,11 @@ public class CapitalTradeOrderServiceImpl implements CapitalTradeOrderService {
 
         capitalAccountDao.update(transferToAccount);
     }
-
+	
+	/**
+	 * #2.2 CANCEL
+	 * 	   TCC 事务失败，将“未达款”返还给用户。
+	 */
     public void cancelRecord(TransactionContext transactionContext, CapitalTradeOrderDto tradeOrderDto) {
         System.out.println("capital cancel record called");
 

@@ -2,10 +2,10 @@ package org.mengyun.tcctransaction.sample.dubbo.redpacket.service;
 
 import org.mengyun.tcctransaction.Compensable;
 import org.mengyun.tcctransaction.api.TransactionContext;
-import org.mengyun.tcctransaction.sample.dubbo.redpacket.domain.entity.RedPacketAccount;
-import org.mengyun.tcctransaction.sample.dubbo.redpacket.domain.repository.RedPacketAccountRepository;
 import org.mengyun.tcctransaction.sample.dubbo.redpacket.api.RedPacketTradeOrderService;
 import org.mengyun.tcctransaction.sample.dubbo.redpacket.api.dto.RedPacketTradeOrderDto;
+import org.mengyun.tcctransaction.sample.dubbo.redpacket.domain.entity.RedPacketAccount;
+import org.mengyun.tcctransaction.sample.dubbo.redpacket.domain.repository.RedPacketAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +28,10 @@ public class RedPacketTradeOrderServiceImpl implements RedPacketTradeOrderServic
         transferFromAccount.transferFrom(tradeOrderDto.getAmount());
 
         redPacketAccountRepository.save(transferFromAccount);
+        
+        // test scenario I: 在第二个远程调用的时候模拟一个异常。 
+        // throw new RuntimeException("manually unexpected exception - red packet");
+        
     }
 
     public void confirmRecord(TransactionContext transactionContext, RedPacketTradeOrderDto tradeOrderDto) {

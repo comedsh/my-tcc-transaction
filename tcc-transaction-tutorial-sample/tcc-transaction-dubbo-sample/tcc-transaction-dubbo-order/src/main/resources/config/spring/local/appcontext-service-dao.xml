@@ -9,20 +9,17 @@
     </bean>
 
     <bean id="orderDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface"
-                  value="org.mengyun.tcctransaction.sample.dubbo.order.infrastructure.dao.OrderDao"></property>
+        <property name="mapperInterface" value="org.mengyun.tcctransaction.sample.dubbo.order.infrastructure.dao.OrderDao"></property>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
 
     <bean id="orderLineDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface"
-                  value="org.mengyun.tcctransaction.sample.dubbo.order.infrastructure.dao.OrderLineDao"></property>
+        <property name="mapperInterface" value="org.mengyun.tcctransaction.sample.dubbo.order.infrastructure.dao.OrderLineDao"></property>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
 
     <bean id="shopDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
-        <property name="mapperInterface"
-                  value="org.mengyun.tcctransaction.sample.dubbo.order.infrastructure.dao.ShopDao"></property>
+        <property name="mapperInterface" value="org.mengyun.tcctransaction.sample.dubbo.order.infrastructure.dao.ShopDao"></property>
         <property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
     </bean>
 
@@ -31,7 +28,6 @@
         <property name="recoverDuration" value="120"/>
         <property name="cronExpression" value="0 */1 * * * ?"/>
     </bean>
-
 
     <bean id="transactionRepository" class="org.mengyun.tcctransaction.spring.repository.SpringJdbcTransactionRepository">
     	<property name="dataSource" ref="orderDataSource"/>
