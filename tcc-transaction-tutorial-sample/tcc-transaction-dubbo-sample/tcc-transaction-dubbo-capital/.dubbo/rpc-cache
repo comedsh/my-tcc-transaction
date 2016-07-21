@@ -1,0 +1,3 @@
+#Dubbo Registry Cache
+#Thu Jul 21 10:23:44 CST 2016
+org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService=empty\://192.168.0.102\:2881/org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService?anyhost\=true&application\=sample-dubbo-capital&category\=configurators&check\=false&dubbo\=2.5.3&interface\=org.mengyun.tcctransaction.sample.dubbo.capital.api.CapitalTradeOrderService&methods\=record,confirmRecord,cancelRecord&payload\=52428800&pid\=24257&retries\=0&side\=provider&timeout\=6000000&timestamp\=1469067823650
