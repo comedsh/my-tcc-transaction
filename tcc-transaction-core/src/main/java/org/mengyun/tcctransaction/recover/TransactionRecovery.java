@@ -36,7 +36,8 @@ public class TransactionRecovery {
         TransactionRepository transactionRepository = transactionConfigurator.getTransactionRepository();
 
         long currentTimeInMillis = Calendar.getInstance().getTimeInMillis();
-
+        
+        // 默认 120 秒 ROOT 事务还没有更新的话，
         List<Transaction> transactions = transactionRepository.findAllUnmodifiedSince(new Date(currentTimeInMillis - transactionConfigurator.getRecoverConfig().getRecoverDuration() * 1000));
 
         List<Transaction> recoverTransactions = new ArrayList<Transaction>();
@@ -55,16 +56,13 @@ public class TransactionRecovery {
 
     private void recoverErrorTransactions(List<Transaction> transactions) {
 
-
         for (Transaction transaction : transactions) {
-
             if (transaction.getRetriedCount() > transactionConfigurator.getRecoverConfig().getMaxRetryCount()) {
-
                 logger.error(String.format("recover failed with max retry count,will not try again. txid:%s, status:%s,retried count:%d", transaction.getXid(), transaction.getStatus().getId(), transaction.getRetriedCount()));
                 continue;
             }
-
             try {
+            	
                 transaction.addRetriedCount();
 
                 if (transaction.getStatus().equals(TransactionStatus.CONFIRMING)) {
@@ -79,6 +77,7 @@ public class TransactionRecovery {
                 }
 
                 transactionConfigurator.getTransactionRepository().delete(transaction);
+                
             } catch (Throwable e) {
                 logger.warn(String.format("recover failed, txid:%s, status:%s,retried count:%d", transaction.getXid(), transaction.getStatus().getId(), transaction.getRetriedCount()), e);
             }

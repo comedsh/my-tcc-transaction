@@ -33,15 +33,22 @@ public class PaymentServiceImpl implements PaymentService{
         System.out.println("order try make payment called");
 
         order.pay(redPacketPayAmount, capitalPayAmount);
-        
+        // TODO 思考，若异常发生在这里，而且业务没这么简单, ORDER 会操作多个表执行多个业务操作，执行到一半，挂掉.. 
+        // 然后进行实物补偿，是不是会被补多？我想，这里的答案就是肯定的罗。
+        // 看来 TRY | CONFIRM / CANCEL 每一步，本地的单事务环境是必须的，这个得要好生考虑。
         orderRepository.updateOrder(order);
-
+        
+        // Scenario III, 在未执行任何远程调用之前抛出异常，看事务补偿是否会增加 Captial 和 Red Packet 的资金
+        // 制造一个 RuntimeException，为什么是 除0 呢？因为保证后续代码可执行，不影响编译 
+        // @SuppressWarnings("unused")
+		// int i = 1 / 0;
+        
         capitalTradeOrderService.record(null, buildCapitalTradeOrderDto(order));
         
         redPacketTradeOrderService.record(null, buildRedPacketTradeOrderDto(order));
         
         // Scenario II: 在主进程调用处抛出异常
-        throw new RuntimeException("Manull Runtime Exception - main Process");
+        // throw new RuntimeException("Manull Runtime Exception - main Process - finally");
     }
 
     public void confirmMakePayment(Order order, BigDecimal redPacketPayAmount, BigDecimal capitalPayAmount) {

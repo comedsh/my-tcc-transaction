@@ -48,8 +48,14 @@ public class PaymentServiceTest {
 	}
 	
 	@Test
-	public void testNormalCase(){
+	public void testStart(){
 		
+		/*
+		 *  用户 1000 总共转 60 块，50 块钱来源于它的 CAPTIAL，另外 10 块来源于 RED PACKET。
+		 *  
+		 *  用户 1000 CAPITAL 账户转 50 到用户 2000 CAPITAL 账户
+		 *  用户 1000 RED PACKET 账户转 10 到用户 2000 RED PACKET 账户
+		 */
 		paymentService.makePayment(order, redPacketPayAmount, order.getTotalAmount().subtract(redPacketPayAmount) );
 		
 	}

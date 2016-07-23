@@ -67,12 +67,13 @@ public class TransactionManager {
     public void rollback() {
 
         Transaction transaction = getCurrentTransaction();
+        
         transaction.changeStatus(TransactionStatus.CANCELLING);
 
         transactionConfigurator.getTransactionRepository().update(transaction);
 
-
         transaction.rollback();
+        
         transactionConfigurator.getTransactionRepository().delete(transaction);
 
     }
